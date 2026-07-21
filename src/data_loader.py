@@ -1,18 +1,32 @@
-import pandas as pd
 from pathlib import Path
 
+import pandas as pd
 
-def load_dataset(path: str) -> pd.DataFrame:
+
+def load_dataset(path: Path) -> pd.DataFrame:
     """
-    Load a CSV dataset.
+    Load a player dataset from a CSV file.
 
     Parameters
     ----------
-    path : str
-        Path to CSV file.
+    path : Path
+        Path to the CSV dataset.
 
     Returns
     -------
     pd.DataFrame
+        Loaded dataset.
+
+    Raises
+    ------
+    FileNotFoundError
+        If the dataset file does not exist.
     """
-    pass
+    if not path.exists():
+        raise FileNotFoundError(
+            f"Dataset not found: {path}"
+        )
+
+    df = pd.read_csv(path)
+
+    return df
