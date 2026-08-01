@@ -19,6 +19,7 @@ def get_per90_features() -> list[str]:
 def find_similar_players(
     df: pd.DataFrame,
     player_name: str,
+    squad: str | None = None,
     top_n: int = 10,
 ) -> pd.DataFrame:
     """
@@ -30,6 +31,8 @@ def find_similar_players(
         Prepared player dataset.
     player_name : str
         Name of the reference player.
+    squad : str | None, optional
+        Squad used to distinguish duplicate player records.
     top_n : int, optional
         Number of similar players to return.
 
@@ -47,6 +50,27 @@ def find_similar_players(
     if player_matches.empty:
         raise ValueError(
             f"Player not found: {player_name}"
+        )
+
+    if squad is not None:
+        player_matches = player_matches[
+            player_matches["Squad"].str.casefold()
+            == squad.casefold()
+        ]
+
+        if player_matches.empty:
+            raise ValueError(
+                f"Player not found: {player_name} - {squad}"
+            )
+
+    elif len(player_matches) > 1:
+        available_squads = ", ".join(
+            player_matches["Squad"].astype(str).tolist()
+        )
+
+        raise ValueError(
+            f"Multiple records found for {player_name}. "
+            f"Specify squad. Available squads: {available_squads}"
         )
 
     player_index = player_matches.index[0]
