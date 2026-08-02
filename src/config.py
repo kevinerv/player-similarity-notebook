@@ -7,3 +7,5 @@ DATA_RAW = PROJECT_ROOT / "data" / "raw"
 DATA_PROCESSED = PROJECT_ROOT / "data" / "processed"
 
 OUTPUTS = PROJECT_ROOT / "outputs"
+
+MIN_MINUTES = 900
